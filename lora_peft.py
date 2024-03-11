@@ -1,7 +1,7 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig, AutoModelForQuestionAnswering, T5Tokenizer
 from wikihop import WikiHop
-from peft import prepare_model_for_kbit_training
+from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model, TaskType
 from preprocess import * 
 model_id = "EleutherAI/gpt-neox-20b"
 model_id_n = "google-t5/t5-base"
@@ -18,22 +18,6 @@ model = AutoModelForQuestionAnswering.from_pretrained(model_id_n, quantization_c
 # name = model.load_adaptor("AdapterHub/bert-base-uncased-pf-wikihop", source="hf")
 model.gradient_checkpointing_enable()
 model = prepare_model_for_kbit_training(model)
-
-def print_trainable_parameters(model):
-    """
-    Prints the number of trainable parameters in the model.
-    """
-    trainable_params = 0
-    all_param = 0
-    for _, param in model.named_parameters():
-        all_param += param.numel()
-        if param.requires_grad:
-            trainable_params += param.numel()
-    print(
-        f"trainable params: {trainable_params} || all params: {all_param} || trainable%: {100 * trainable_params / all_param}"
-    )
-
-from peft import LoraConfig, get_peft_model, TaskType
 
 config = LoraConfig(
     r=8, 
