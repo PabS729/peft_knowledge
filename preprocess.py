@@ -17,27 +17,60 @@ def print_trainable_parameters(model):
 
 tokenizer = AutoTokenizer.from_pretrained("google-t5/t5-base")
 def preprocess_function(examples):
-    questions = [q.strip() for q in examples["question"]]
+    questions = examples["question"]
+    # print(len(questions))
     contexts = [' '.join(s) for s in examples['supports']]
+    anss = [', '.join(c) for c in examples['candidates']]
+    questions = [q + " Choose one of the following as an answer: " + a for (q,a) in zip(questions, anss)]
     inputs = tokenizer(
         questions,
         contexts,
-        max_length=384,
-        truncation="only_second",
-        return_overflowing_tokens=True,
+        max_length=512,
+        # truncation="only_second",
+        # return_overflowing_tokens=True,
         return_offsets_mapping=True,
-        padding="max_length",
+        # padding="max_length"
     )
+    # print(len(contexts[0]))
+    # print(inputs[0])
 
+    # inputs['context'] = contexts
+    # inputs['question'] = questions
     offset_mapping = inputs.pop("offset_mapping")
     answers = examples["answer"]
+    length_mapping = [i[-2][1] for i in offset_mapping]
     start_positions = []
     end_positions = []
+    ans_starts = []
 
+    pos = 0
+    found = False
+    for c in range(len(contexts)):
+        length = len(answers[c])
+        for r in range(len(contexts[c])):
+            # print(contexts[c])
+            if contexts[c][r].lower() == answers[c][0].lower() and r < len(contexts[c]) - length:
+                next_str = contexts[c][r:r+length].lower()
+                if next_str == answers[c]:
+                    pos += r
+                    found = True
+                    break
+        if found == False:
+            ans_starts.append(0)
+        else:
+            ans_starts.append(pos)
+            found = False
+        pos = 0
+    # print(ans_starts[:100])
+    new_k = []
+    for a,s in zip(answers, ans_starts):
+        new_k.append({"text": [a], 'answer_start': [s]})
+    # input['answers'] = new_k
     for i, offset in enumerate(offset_mapping):
         answer = answers[i]
-        start_char = answer["answer_start"][0]
-        end_char = answer["answer_start"][0] + len(answer["text"][0])
+        start_char = ans_starts[i]
+        end_char = ans_starts[i] + len(answer)
+        
         sequence_ids = inputs.sequence_ids(i)
 
         # Find the start and end of the context
@@ -65,6 +98,10 @@ def preprocess_function(examples):
                 idx -= 1
             end_positions.append(idx + 1)
 
+    # print(len(offset_mapping))
+    # print(start_positions[:50])
+
     inputs["start_positions"] = start_positions
-    inputs["end_positions"] = end_positions
+    inputs["end_positions"] = start_positions
+    # print(len(contexts), len(questions), len(answers), inputs[])
     return inputs
