@@ -10,12 +10,10 @@ def prepare_validation_features(examples):
     # in one example possible giving several features when a context is long, each of those features having a
     # context that overlaps a bit the context of the previous feature.
     tokenized_examples = tokenizer(
-        examples["question" if pad_on_right else "context"],
-        examples["context" if pad_on_right else "question"],
-        max_length=max_length,
-        return_overflowing_tokens=True,
+        examples["question"],
+        examples["context"],
+        max_length=512,
         return_offsets_mapping=True,
-        padding="max_length",
     )
 
     # Since one example might give us several features if it has a long context, we need a map from a feature to
@@ -28,7 +26,7 @@ def prepare_validation_features(examples):
     for i in range(len(tokenized_examples["input_ids"])):
         # Grab the sequence corresponding to that example (to know what is the context and what is the question).
         sequence_ids = tokenized_examples.sequence_ids(i)
-        context_index = 1 if pad_on_right else 0
+        context_index = 1
 
         # One example can give several spans, this is the index of the example containing this span of text.
         sample_index = sample_mapping[i]

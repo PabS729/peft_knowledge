@@ -26,16 +26,10 @@ def preprocess_function(examples):
         questions,
         contexts,
         max_length=512,
-        # truncation="only_second",
-        # return_overflowing_tokens=True,
         return_offsets_mapping=True,
         # padding="max_length"
     )
-    # print(len(contexts[0]))
-    # print(inputs[0])
 
-    # inputs['context'] = contexts
-    # inputs['question'] = questions
     offset_mapping = inputs.pop("offset_mapping")
     answers = examples["answer"]
     length_mapping = [i[-2][1] for i in offset_mapping]
@@ -105,3 +99,37 @@ def preprocess_function(examples):
     inputs["end_positions"] = start_positions
     # print(len(contexts), len(questions), len(answers), inputs[])
     return inputs
+
+def preprocess_validation(examples):
+    questions = examples['question']
+    contexts = [' '.join(s) for s in examples['supports']]
+    anss = [', '.join(c) for c in examples['candidates']]
+    questions = [q + " Choose one of the following as an answer: " + a for (q,a) in zip(questions, anss)]
+    answers = examples['answer']
+
+    
+    examples['context'] = contexts
+
+    ans_starts = []
+
+    pos = 0
+    found = False
+    for c in range(len(contexts)):
+        length = len(answers[c])
+        for r in range(len(contexts[c])):
+            # print(contexts[c])
+            if contexts[c][r].lower() == answers[c][0].lower() and r < len(contexts[c]) - length:
+                next_str = contexts[c][r:r+length].lower()
+                if next_str == answers[c]:
+                    pos += r
+                    found = True
+                    break
+        if found == False:
+            ans_starts.append(0)
+        else:
+            ans_starts.append(pos)
+            found = False
+        pos = 0
+    examples['question'] = questions
+    examples['answers'] = [{"ans_start": [a], "text": [b]} for a, b in zip(ans_starts, answers)]
+    return examples
