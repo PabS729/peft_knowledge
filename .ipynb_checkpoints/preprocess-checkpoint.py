@@ -35,8 +35,6 @@ def preprocess_function(examples):
     answers = examples["answer"]
     start_positions = []
     end_positions = []
-    
-    
 
     
 
