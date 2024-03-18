@@ -18,8 +18,8 @@ def preprocess_function(examples):
     )
 
 
-tokenized_data_test = data_test['train'].map(preprocess_function, batched=True).input_ids
-tokenized_data_rev = data_rev['train'].map(preprocess_function, batched=True).input_ids
+tokenized_data_test = data_test['train'].map(preprocess_function, batched=True)
+tokenized_data_rev = data_rev['train'].map(preprocess_function, batched=True)
 model_test = AutoModelForCausalLM.from_pretrained(model_ids[2], load_in_4bit=True)
 model_test = PeftModel.from_pretrained(model_test, 'saved')
 

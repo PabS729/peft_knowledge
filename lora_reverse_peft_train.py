@@ -8,7 +8,7 @@ from datasets import load_metric, load_dataset
 import tqdm
 
 model_id_flan = "google/flan-t5-base"
-model_ids = ["google/flan-t5-base", "google-t5/t5-base", "mistralai/Mistral-7B-v0.1", "meta-llama/Llama-2-7b", "mistralai/Mistral-7B-Instruct-v0.2"]
+model_ids = ["google/flan-t5-base", "google-t5/t5-base", "Mistral-7B-v0.1", "meta-llama/Llama-2-7b", "mistralai/Mistral-7B-Instruct-v0.2"]
 model_id_n = "google-t5/t5-base"
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
