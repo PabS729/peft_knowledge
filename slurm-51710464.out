@@ -46,3 +46,4 @@ wandb: Waiting for W&B process to finish... (failed 1). Press Control-C to abort
 wandb: Network error (TransientError), entering retry loop.
 wandb: Network error (TransientError), entering retry loop.
 wandb: Network error (TransientError), entering retry loop.
+slurmstepd: error: *** JOB 51710464 ON eu-lo-s4-084 CANCELLED AT 2024-03-18T14:50:54 DUE TO TIME LIMIT ***
