@@ -1,0 +1,20 @@
+2024-03-18 13:30:18.646492: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+The `load_in_4bit` and `load_in_8bit` arguments are deprecated and will be removed in the future versions. Please, pass a `BitsAndBytesConfig` object in `quantization_config` argument instead.
+`low_cpu_mem_usage` was None, now set to True since model is quantized.
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:16<00:16, 16.43s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:23<00:00, 11.17s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:23<00:00, 11.96s/it]
+The attention mask and the pad token id were not set. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results.
+Setting `pad_token_id` to `eos_token_id`:2 for open-end generation.
+Traceback (most recent call last):
+  File "/cluster/project/sachan/minjing/peft_knowledge/lora_reverse_eval.py", line 28, in <module>
+    out = model_test.generate(tok, max_new_tokens=100, do_sample=True, top_k=50, top_p=0.95)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/project/sachan/minjing/peft_knowledge/peft_knowledge/lib64/python3.11/site-packages/peft/peft_model.py", line 1156, in generate
+    outputs = self.base_model.generate(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/apps/nss/gcc-8.2.0/python/3.11.2/x86_64/lib64/python3.11/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/project/sachan/minjing/peft_knowledge/peft_knowledge/lib64/python3.11/site-packages/transformers/generation/utils.py", line 1356, in generate
+    batch_size = inputs_tensor.shape[0]
+                 ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'shape'

@@ -1,0 +1,27 @@
+2024-03-18 13:19:11.653829: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 300 examples [00:00, 17536.18 examples/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 300 examples [00:00, 19132.85 examples/s]
+Map:   0%|          | 0/300 [00:00<?, ? examples/s]Map: 100%|██████████| 300/300 [00:00<00:00, 2077.18 examples/s]Map: 100%|██████████| 300/300 [00:00<00:00, 1590.56 examples/s]
+Map:   0%|          | 0/300 [00:00<?, ? examples/s]Map: 100%|██████████| 300/300 [00:00<00:00, 2630.91 examples/s]Map: 100%|██████████| 300/300 [00:00<00:00, 2128.63 examples/s]
+The `load_in_4bit` and `load_in_8bit` arguments are deprecated and will be removed in the future versions. Please, pass a `BitsAndBytesConfig` object in `quantization_config` argument instead.
+`low_cpu_mem_usage` was None, now set to True since model is quantized.
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [01:19<01:19, 79.84s/it]Loading checkpoint shards: 100%|██████████| 2/2 [01:56<00:00, 54.41s/it]Loading checkpoint shards: 100%|██████████| 2/2 [01:56<00:00, 58.23s/it]
+The attention mask and the pad token id were not set. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results.
+Setting `pad_token_id` to `eos_token_id`:2 for open-end generation.
+Traceback (most recent call last):
+  File "/cluster/project/sachan/minjing/peft_knowledge/lora_reverse_eval.py", line 26, in <module>
+    outputs_test = model_test.generate(tokenized_data_test, max_new_tokens=100, do_sample=True, top_k=50, top_p=0.95)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/project/sachan/minjing/peft_knowledge/peft_knowledge/lib64/python3.11/site-packages/peft/peft_model.py", line 1156, in generate
+    outputs = self.base_model.generate(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/apps/nss/gcc-8.2.0/python/3.11.2/x86_64/lib64/python3.11/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/project/sachan/minjing/peft_knowledge/peft_knowledge/lib64/python3.11/site-packages/transformers/generation/utils.py", line 1372, in generate
+    model_kwargs["attention_mask"] = self._prepare_attention_mask_for_generation(
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/project/sachan/minjing/peft_knowledge/peft_knowledge/lib64/python3.11/site-packages/transformers/generation/utils.py", line 460, in _prepare_attention_mask_for_generation
+    is_input_ids = len(inputs.shape) == 2 and inputs.dtype in [torch.int, torch.long]
+                                              ^^^^^^^^^^^^
+AttributeError: 'Dataset' object has no attribute 'dtype'

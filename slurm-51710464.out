@@ -1,0 +1,48 @@
+2024-03-18 14:21:32.398334: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+/cluster/project/sachan/minjing/peft_knowledge/peft_knowledge/lib64/python3.11/site-packages/transformers/models/t5/tokenization_t5_fast.py:171: FutureWarning: This tokenizer was incorrectly instantiated with a model max length of 512 which will be corrected in Transformers v5.
+For now, this behavior is kept to avoid breaking backwards compatibility when padding/encoding with `truncation is True`.
+- Be aware that you SHOULD NOT rely on google-t5/t5-base automatically truncating your input to 512 when padding/encoding.
+- If you want to encode/pad to sequences longer than 512 you can either instantiate this tokenizer with `model_max_length` or pass `max_length` when encoding/padding.
+- To avoid this warning, please instantiate this tokenizer with `model_max_length` set to your preferred value.
+  warnings.warn(
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [01:28<01:28, 88.25s/it]Loading checkpoint shards: 100%|██████████| 2/2 [02:07<00:00, 59.48s/it]Loading checkpoint shards: 100%|██████████| 2/2 [02:07<00:00, 63.80s/it]
+trainable params: 20971520 || all params: 3773042688 || trainable%: 0.5558251452256031
+dict_keys(['train'])
+Map:   0%|          | 0/900 [00:00<?, ? examples/s]Map: 100%|██████████| 900/900 [00:00<00:00, 3057.03 examples/s]Map: 100%|██████████| 900/900 [00:00<00:00, 2163.27 examples/s]
+/cluster/home/shimin/.local/lib64/python3.11/site-packages/accelerate/accelerator.py:432: FutureWarning: Passing the following arguments to `Accelerator` is deprecated and will be removed in version 1.0 of Accelerate: dict_keys(['dispatch_batches', 'split_batches', 'even_batches', 'use_seedable_sampler']). Please pass an `accelerate.DataLoaderConfiguration` instead: 
+dataloader_config = DataLoaderConfiguration(dispatch_batches=None, split_batches=False, even_batches=True, use_seedable_sampler=True)
+  warnings.warn(
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+wandb: Currently logged in as: pabs729 (shimi). Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.14.2
+wandb: Run data is saved locally in /cluster/project/sachan/minjing/peft_knowledge/wandb/run-20240318_142501-bbjnc51n
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run visionary-grass-5
+wandb: ⭐️ View project at https://wandb.ai/shimi/huggingface
+wandb: 🚀 View run at https://wandb.ai/shimi/huggingface/runs/bbjnc51n
+900
+  0%|          | 0/10 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/cluster/project/sachan/minjing/peft_knowledge/lora_reverse_peft_train.py", line 91, in <module>
+    main()
+  File "/cluster/project/sachan/minjing/peft_knowledge/lora_reverse_peft_train.py", line 85, in main
+    trainer.train()
+  File "/cluster/project/sachan/minjing/peft_knowledge/peft_knowledge/lib64/python3.11/site-packages/transformers/trainer.py", line 1638, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/project/sachan/minjing/peft_knowledge/peft_knowledge/lib64/python3.11/site-packages/transformers/trainer.py", line 1988, in _inner_training_loop
+    self.current_flos += float(self.floating_point_ops(inputs))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/project/sachan/minjing/peft_knowledge/peft_knowledge/lib64/python3.11/site-packages/transformers/trainer.py", line 3667, in floating_point_ops
+    return self.model.floating_point_ops(inputs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/project/sachan/minjing/peft_knowledge/peft_knowledge/lib64/python3.11/site-packages/transformers/modeling_utils.py", line 1141, in floating_point_ops
+    return 6 * self.estimate_tokens(input_dict) * self.num_parameters(exclude_embeddings=exclude_embeddings)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/project/sachan/minjing/peft_knowledge/peft_knowledge/lib64/python3.11/site-packages/transformers/modeling_utils.py", line 1089, in num_parameters
+    param.numel() * 2 * self.hf_quantizer.quantization_config.bnb_4bit_quant_storage.itemsize
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'torch.dtype' object has no attribute 'itemsize'
+wandb: Waiting for W&B process to finish... (failed 1). Press Control-C to abort syncing.
+wandb: Network error (TransientError), entering retry loop.
+wandb: Network error (TransientError), entering retry loop.
+wandb: Network error (TransientError), entering retry loop.

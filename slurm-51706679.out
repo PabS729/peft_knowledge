@@ -1,0 +1,6 @@
+2024-03-18 13:35:19.331077: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+Traceback (most recent call last):
+  File "/cluster/project/sachan/minjing/peft_knowledge/lora_reverse_eval.py", line 21, in <module>
+    tokenized_data_test = data_test.map(preprocess_function, batched=True)
+                          ^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'map'
