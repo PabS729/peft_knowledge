@@ -39,14 +39,15 @@ data_train = load_dataset('json', data_files='june_version_7921032488/p2d_prompt
 print(data_train.keys())
 
 tokenizer = AutoTokenizer.from_pretrained(model_ids[2])
-tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+# tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+tokenizer.pad_token = tokenizer.eos_token
 
 def preprocess_function(examples):
     return tokenizer(
-        examples['prompt'],
-        examples['completion'],
+        text=examples['prompt'],
+        text_target=examples['completion'],
         max_length=384,
-        padding="max_length"
+        padding="max_length",
     )
 
 def main():
@@ -67,7 +68,7 @@ def main():
         train_dataset=tokenized_data_train,
         args=transformers.TrainingArguments(
             per_device_train_batch_size=1,
-            gradient_accumulation_steps=4,
+            gradient_accumulation_steps=1,
             num_train_epochs=5,
             warmup_steps=2,
             max_steps=10,
@@ -76,9 +77,9 @@ def main():
             logging_steps=1,
             output_dir="outputs",
             optim="paged_adamw_8bit",
-            remove_unused_columns=False
+            # remove_unused_columns=False
         ),
-        data_collator=transformers.DataCollatorForLanguageModeling(tokenizer, mlm=False),
+        # data_collator=transformers.DataCollatorForLanguageModeling(tokenizer, mlm=False),
     )
     model.config.use_cache = False  # silence the warnings. Please re-enable for inference!
     trainer.train()
