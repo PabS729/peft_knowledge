@@ -1,6 +1,5 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig, AutoModelForQuestionAnswering, pipeline
-from wikihop import WikiHop
 from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model, TaskType
 from preprocess_reverse import *
 from datasets import load_metric, load_dataset
@@ -34,7 +33,7 @@ print_trainable_parameters(model)
 
 
 
-data_train = load_dataset('json', data_files='june_version_7921032488/all.jsonl')
+data_train = load_dataset('json', data_files='june_version_7921032488/p2d_prompts_train.jsonl')
 data_val = load_dataset('json', data_files='june_version_7921032488/unrealized_examples.jsonl')
 # for old, new in [["prompt", "input"], ["completion", "output"]]:
 #         data_train = data_train.rename_column(old, new)
@@ -53,6 +52,7 @@ data_val = load_dataset('json', data_files='june_version_7921032488/unrealized_e
 #     )
 
 def main():
+    max_steps = 50
     data_train.cleanup_cache_files()
     tokenized_data_train = data_train['train'].map(preprocess_training, batched=True)
     # tokenized_data = data.map(preprocess_function, batched=True, remove_columns=data["train"].column_names)
@@ -79,13 +79,13 @@ def main():
     trainer = transformers.Trainer(
         model=model,
         train_dataset=tokenized_data_train,
-        eval_dataset=tokenized_data_eval,
+        # eval_dataset=tokenized_data_eval,
         args=transformers.TrainingArguments(
             per_device_train_batch_size=1,
             gradient_accumulation_steps=1,
             num_train_epochs=5,
             warmup_steps=2,
-            max_steps=40,
+            max_steps=max_steps,
             learning_rate=2e-4,
             fp16=True,
             logging_steps=1,
@@ -98,7 +98,7 @@ def main():
     model.config.use_cache = False  # silence the warnings. Please re-enable for inference!
     trainer.train()
 
-    trainer.save_model("saved_new_30")
+    trainer.save_model("saved_" + model_ids[2]  + "_" + str(max_steps))
 
 
 if __name__ == "__main__":
